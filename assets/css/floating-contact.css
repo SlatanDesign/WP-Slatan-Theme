@@ -1,0 +1,795 @@
+/**
+ * Floating Contact Frontend Styles
+ *
+ * @package WP_Slatan_Theme
+ * @since 1.0.2
+ */
+
+/* CSS Variables - set by PHP */
+:root {
+    --wpslt-fc-button-size: 60px;
+    --wpslt-fc-icon-size: 28px;
+    --wpslt-fc-primary-color: #E41E26;
+    --wpslt-fc-border-radius: 50%;
+    --wpslt-fc-offset-x: 20px;
+    --wpslt-fc-offset-y: 20px;
+    --wpslt-fc-tooltip-bg: #333333;
+    --wpslt-fc-tooltip-color: #ffffff;
+    --wpslt-fc-tooltip-font-size: 14px;
+    --wpslt-fc-tooltip-radius: 4px;
+    --wpslt-fc-contact-size: 50px;
+    --wpslt-fc-contact-icon-size: 24px;
+    --wpslt-fc-contact-gap: 10px;
+    --wpslt-fc-z-index: 99999;
+    --wpslt-fc-anim-duration: 0.3s;
+    --wpslt-fc-menu-delay: 50ms;
+}
+
+
+/* Main Container */
+.wpslt-floating-contact {
+    position: fixed;
+    z-index: var(--wpslt-fc-z-index);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--wpslt-fc-contact-gap);
+}
+
+/* Position Classes */
+.wpslt-fc-right {
+    right: var(--wpslt-fc-offset-x);
+}
+
+.wpslt-fc-left {
+    left: var(--wpslt-fc-offset-x);
+}
+
+.wpslt-fc-bottom {
+    bottom: var(--wpslt-fc-offset-y);
+    flex-direction: column-reverse;
+}
+
+.wpslt-fc-top {
+    top: var(--wpslt-fc-offset-y);
+}
+
+/* Main Button */
+.wpslt-fc-button {
+    width: var(--wpslt-fc-button-size) !important;
+    height: var(--wpslt-fc-button-size) !important;
+    border-radius: var(--wpslt-fc-border-radius) !important;
+    background: var(--wpslt-fc-primary-color) !important;
+    color: #fff !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    cursor: pointer;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--wpslt-fc-anim-duration) ease, box-shadow var(--wpslt-fc-anim-duration) ease;
+    position: relative;
+    box-sizing: border-box !important;
+}
+
+/* Hover styles are controlled by .wpslt-fc-hover-* classes */
+
+.wpslt-fc-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Icon States */
+.wpslt-fc-icon-open,
+.wpslt-fc-icon-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    line-height: 1;
+}
+
+/* Ensure toggle button icons use correct size */
+.wpslt-fc-icon-open i,
+.wpslt-fc-icon-close i {
+    font-size: var(--wpslt-fc-icon-size) !important;
+}
+
+/* Initially hide close icon */
+.wpslt-fc-icon-close {
+    display: none;
+}
+
+/* When open, hide open icon and show close icon */
+.wpslt-floating-contact.is-open .wpslt-fc-icon-open {
+    display: none;
+}
+
+.wpslt-floating-contact.is-open .wpslt-fc-icon-close {
+    display: flex;
+}
+
+/* ========================================
+   TOGGLE BUTTON ANIMATIONS
+   ======================================== */
+
+/* Toggle Animation: Rotate - rotates the ICON only, not the button container */
+.wpslt-fc-toggle-rotate .wpslt-fc-button .wpslt-fc-icon-open,
+.wpslt-fc-toggle-rotate .wpslt-fc-button .wpslt-fc-icon-close {
+    transform-origin: center center;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wpslt-fc-toggle-rotate.is-open .wpslt-fc-button .wpslt-fc-icon-close {
+    animation: wpslt-toggle-rotate-in 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.wpslt-fc-toggle-rotate:not(.is-open) .wpslt-fc-button .wpslt-fc-icon-open {
+    animation: wpslt-toggle-rotate-out 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Rotate animation keyframe is generated dynamically in PHP */
+
+/* Toggle Animation: Flip - rotates the ICON only */
+.wpslt-fc-toggle-flip .wpslt-fc-button .wpslt-fc-icon-open,
+.wpslt-fc-toggle-flip .wpslt-fc-button .wpslt-fc-icon-close {
+    transform-style: preserve-3d;
+    transform-origin: center center;
+    transition: transform 0.4s ease;
+}
+
+.wpslt-fc-toggle-flip.is-open .wpslt-fc-button .wpslt-fc-icon-close {
+    animation: wpslt-toggle-flip-in 0.4s ease forwards;
+}
+
+.wpslt-fc-toggle-flip:not(.is-open) .wpslt-fc-button .wpslt-fc-icon-open {
+    animation: wpslt-toggle-flip-out 0.4s ease forwards;
+}
+
+/* Flip animation keyframe is generated dynamically in PHP */
+
+/* Toggle Animation: Scale + Rotate - rotates the ICON only */
+.wpslt-fc-toggle-scale-rotate .wpslt-fc-button .wpslt-fc-icon-open,
+.wpslt-fc-toggle-scale-rotate .wpslt-fc-button .wpslt-fc-icon-close {
+    transform-origin: center center;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.wpslt-fc-toggle-scale-rotate.is-open .wpslt-fc-button .wpslt-fc-icon-close {
+    animation: wpslt-toggle-scale-rotate-in 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.wpslt-fc-toggle-scale-rotate:not(.is-open) .wpslt-fc-button .wpslt-fc-icon-open {
+    animation: wpslt-toggle-scale-rotate-out 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Scale+Rotate animation keyframe is generated dynamically in PHP */
+
+/* Keyframes for Toggle Animations - Reverse (Close) */
+@keyframes wpslt-toggle-rotate-out {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes wpslt-toggle-flip-out {
+    0% {
+        transform: perspective(400px) rotateY(0deg);
+    }
+
+    100% {
+        transform: perspective(400px) rotateY(-180deg);
+    }
+}
+
+@keyframes wpslt-toggle-scale-rotate-out {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+
+    100% {
+        transform: scale(0.8) rotate(-360deg);
+    }
+}
+
+/* Toggle Animation: None (default behavior) */
+.wpslt-fc-toggle-none .wpslt-fc-button {
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+/* Animations */
+.wpslt-fc-animate-pulse {
+    animation: wpslt-fc-pulse 2s infinite;
+}
+
+.wpslt-fc-animate-bounce .wpslt-fc-button,
+.wpslt-fc-animate-bounce .wpslt-fc-contact {
+    animation: wpslt-fc-bounce 2s infinite;
+}
+
+.wpslt-fc-animate-shake .wpslt-fc-button,
+.wpslt-fc-animate-shake .wpslt-fc-contact {
+    animation: wpslt-fc-shake 2s infinite;
+}
+
+.wpslt-fc-animate-wobble .wpslt-fc-button,
+.wpslt-fc-animate-wobble .wpslt-fc-contact {
+    animation: wpslt-fc-wobble 2s infinite;
+}
+
+.wpslt-floating-contact.is-open .wpslt-fc-button,
+.wpslt-floating-contact.is-open .wpslt-fc-contact {
+    animation: none;
+}
+
+
+@keyframes wpslt-fc-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(228, 30, 38, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 15px rgba(228, 30, 38, 0);
+    }
+}
+
+@keyframes wpslt-fc-bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes wpslt-fc-shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes wpslt-fc-wobble {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    15% {
+        transform: rotate(-5deg);
+    }
+
+    30% {
+        transform: rotate(3deg);
+    }
+
+    45% {
+        transform: rotate(-3deg);
+    }
+
+    60% {
+        transform: rotate(2deg);
+    }
+
+    75% {
+        transform: rotate(-1deg);
+    }
+}
+
+/* ========================================
+   HOVER ANIMATIONS
+   ======================================== */
+
+/* Hover: Scale (default) */
+.wpslt-fc-hover-scale .wpslt-fc-button:hover,
+.wpslt-fc-hover-scale .wpslt-fc-contact:hover {
+    transform: scale(1.15) !important;
+    transition: transform 0.2s ease;
+}
+
+/* Hover: Rotate */
+.wpslt-fc-hover-rotate .wpslt-fc-button:hover i,
+.wpslt-fc-hover-rotate .wpslt-fc-contact:hover i {
+    transform: rotate(15deg) !important;
+    transition: transform 0.3s ease;
+}
+
+/* Hover: Glow (Keep on container for box-shadow) */
+.wpslt-fc-hover-glow .wpslt-fc-button:hover,
+.wpslt-fc-hover-glow .wpslt-fc-contact:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px currentColor !important;
+    transform: scale(1.05) !important;
+    transition: all 0.3s ease;
+}
+
+/* Hover: Swing */
+.wpslt-fc-hover-swing .wpslt-fc-button:hover i,
+.wpslt-fc-hover-swing .wpslt-fc-contact:hover i {
+    animation: wpslt-fc-hover-swing 0.6s ease-in-out !important;
+}
+
+@keyframes wpslt-fc-hover-swing {
+    20% {
+        transform: rotate(15deg);
+    }
+
+    40% {
+        transform: rotate(-10deg);
+    }
+
+    60% {
+        transform: rotate(5deg);
+    }
+
+    80% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+/* Hover: Pop */
+.wpslt-fc-hover-pop .wpslt-fc-button:hover,
+.wpslt-fc-hover-pop .wpslt-fc-contact:hover {
+    animation: wpslt-fc-hover-pop 0.3s ease-out;
+}
+
+@keyframes wpslt-fc-hover-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+/* ========================================
+   MENU ANIMATIONS
+   ======================================== */
+
+/* Menu: Slide (Chaty-style - individual icons slide out) */
+.wpslt-fc-menu-slide .wpslt-fc-contact {
+    opacity: 0;
+    transform: scale(0.5);
+    transition: all var(--wpslt-fc-anim-duration) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Staggered delays for slide animation - opening */
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact:nth-child(1) {
+    transition-delay: 0s;
+}
+
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact:nth-child(2) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 1);
+}
+
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact:nth-child(3) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 2);
+}
+
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact:nth-child(4) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 3);
+}
+
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact:nth-child(5) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 4);
+}
+
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact:nth-child(6) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 5);
+}
+
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact:nth-child(7) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 6);
+}
+
+.wpslt-fc-menu-slide.is-open .wpslt-fc-contact:nth-child(8) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 7);
+}
+
+/* Staggered delays for slide animation - closing (reverse order) */
+.wpslt-fc-menu-slide:not(.is-open) .wpslt-fc-contact:nth-child(1) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 5);
+}
+
+.wpslt-fc-menu-slide:not(.is-open) .wpslt-fc-contact:nth-child(2) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 4);
+}
+
+.wpslt-fc-menu-slide:not(.is-open) .wpslt-fc-contact:nth-child(3) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 3);
+}
+
+.wpslt-fc-menu-slide:not(.is-open) .wpslt-fc-contact:nth-child(4) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 2);
+}
+
+.wpslt-fc-menu-slide:not(.is-open) .wpslt-fc-contact:nth-child(5) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 1);
+}
+
+.wpslt-fc-menu-slide:not(.is-open) .wpslt-fc-contact:nth-child(6) {
+    transition-delay: 0s;
+}
+
+.wpslt-fc-menu-slide:not(.is-open) .wpslt-fc-contact:nth-child(7) {
+    transition-delay: 0s;
+}
+
+.wpslt-fc-menu-slide:not(.is-open) .wpslt-fc-contact:nth-child(8) {
+    transition-delay: 0s;
+}
+
+/* Menu: Fade */
+.wpslt-fc-menu-fade .wpslt-fc-contacts {
+    transform: scale(1);
+    opacity: 0;
+}
+
+.wpslt-fc-menu-fade.is-open .wpslt-fc-contacts {
+    opacity: 1;
+}
+
+/* Menu: Zoom */
+.wpslt-fc-menu-zoom .wpslt-fc-contacts {
+    transform: scale(0);
+}
+
+.wpslt-fc-menu-zoom.is-open .wpslt-fc-contacts {
+    transform: scale(1);
+}
+
+/* Menu: Flip */
+.wpslt-fc-menu-flip .wpslt-fc-contacts {
+    transform: perspective(400px) rotateX(-90deg);
+    transform-origin: center bottom;
+}
+
+.wpslt-fc-bottom.wpslt-fc-menu-flip .wpslt-fc-contacts {
+    transform: perspective(400px) rotateX(90deg);
+    transform-origin: center top;
+}
+
+.wpslt-fc-menu-flip.is-open .wpslt-fc-contacts {
+    transform: perspective(400px) rotateX(0deg);
+}
+
+/* Menu: Bounce */
+.wpslt-fc-menu-bounce .wpslt-fc-contacts {
+    transform: scale(0);
+}
+
+.wpslt-fc-menu-bounce.is-open .wpslt-fc-contacts {
+    animation: wpslt-fc-menu-bounce-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform: scale(1);
+}
+
+@keyframes wpslt-fc-menu-bounce-in {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+
+    70% {
+        transform: scale(0.95);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Contact Items Container */
+.wpslt-fc-contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--wpslt-fc-contact-gap);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity var(--wpslt-fc-anim-duration) ease, visibility var(--wpslt-fc-anim-duration) ease;
+    pointer-events: none;
+}
+
+.wpslt-fc-bottom .wpslt-fc-contacts {
+    flex-direction: column-reverse;
+}
+
+.wpslt-floating-contact.is-open .wpslt-fc-contacts {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* Individual Contact Item */
+.wpslt-fc-contact {
+    width: var(--wpslt-fc-contact-size);
+    height: var(--wpslt-fc-contact-size);
+    border-radius: var(--wpslt-fc-border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: var(--wpslt-fc-contact-icon-size);
+    text-decoration: none;
+    transition: transform var(--wpslt-fc-anim-duration) ease, box-shadow var(--wpslt-fc-anim-duration) ease, opacity var(--wpslt-fc-anim-duration) ease;
+    position: relative;
+}
+
+/* Ensure icon inside contact item uses correct size */
+.wpslt-fc-contact i {
+    font-size: var(--wpslt-fc-contact-icon-size) !important;
+}
+
+.wpslt-fc-contact:hover {
+    /* Hover styles controlled by .wpslt-fc-hover-* classes */
+    color: #fff;
+}
+
+.wpslt-fc-contact:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Staggered Animation for other menu types */
+.wpslt-fc-menu-fade.is-open .wpslt-fc-contact:nth-child(1),
+.wpslt-fc-menu-zoom.is-open .wpslt-fc-contact:nth-child(1),
+.wpslt-fc-menu-flip.is-open .wpslt-fc-contact:nth-child(1),
+.wpslt-fc-menu-bounce.is-open .wpslt-fc-contact:nth-child(1) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 1);
+}
+
+.wpslt-fc-menu-fade.is-open .wpslt-fc-contact:nth-child(2),
+.wpslt-fc-menu-zoom.is-open .wpslt-fc-contact:nth-child(2),
+.wpslt-fc-menu-flip.is-open .wpslt-fc-contact:nth-child(2),
+.wpslt-fc-menu-bounce.is-open .wpslt-fc-contact:nth-child(2) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 2);
+}
+
+.wpslt-fc-menu-fade.is-open .wpslt-fc-contact:nth-child(3),
+.wpslt-fc-menu-zoom.is-open .wpslt-fc-contact:nth-child(3),
+.wpslt-fc-menu-flip.is-open .wpslt-fc-contact:nth-child(3),
+.wpslt-fc-menu-bounce.is-open .wpslt-fc-contact:nth-child(3) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 3);
+}
+
+.wpslt-fc-menu-fade.is-open .wpslt-fc-contact:nth-child(4),
+.wpslt-fc-menu-zoom.is-open .wpslt-fc-contact:nth-child(4),
+.wpslt-fc-menu-flip.is-open .wpslt-fc-contact:nth-child(4),
+.wpslt-fc-menu-bounce.is-open .wpslt-fc-contact:nth-child(4) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 4);
+}
+
+.wpslt-fc-menu-fade.is-open .wpslt-fc-contact:nth-child(5),
+.wpslt-fc-menu-zoom.is-open .wpslt-fc-contact:nth-child(5),
+.wpslt-fc-menu-flip.is-open .wpslt-fc-contact:nth-child(5),
+.wpslt-fc-menu-bounce.is-open .wpslt-fc-contact:nth-child(5) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 5);
+}
+
+.wpslt-fc-menu-fade.is-open .wpslt-fc-contact:nth-child(6),
+.wpslt-fc-menu-zoom.is-open .wpslt-fc-contact:nth-child(6),
+.wpslt-fc-menu-flip.is-open .wpslt-fc-contact:nth-child(6),
+.wpslt-fc-menu-bounce.is-open .wpslt-fc-contact:nth-child(6) {
+    transition-delay: calc(var(--wpslt-fc-menu-delay) * 6);
+}
+
+/* Tooltip */
+.wpslt-fc-contact[data-tooltip]::before,
+.wpslt-fc-button[data-tooltip]::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    background: var(--wpslt-fc-tooltip-bg);
+    color: var(--wpslt-fc-tooltip-color);
+    font-size: var(--wpslt-fc-tooltip-font-size);
+    padding: 6px 12px;
+    border-radius: var(--wpslt-fc-tooltip-radius);
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+.wpslt-fc-contact[data-tooltip]::after,
+.wpslt-fc-button[data-tooltip]::after {
+    content: '';
+    position: absolute;
+    border: 6px solid transparent;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* Tooltip Position - Left */
+[data-tooltip-position="left"] .wpslt-fc-contact[data-tooltip]::before,
+[data-tooltip-position="left"] .wpslt-fc-button[data-tooltip]::before {
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+[data-tooltip-position="left"] .wpslt-fc-contact[data-tooltip]::after,
+[data-tooltip-position="left"] .wpslt-fc-button[data-tooltip]::after {
+    right: calc(100% + 4px);
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: var(--wpslt-fc-tooltip-bg);
+}
+
+/* Tooltip Position - Right */
+[data-tooltip-position="right"] .wpslt-fc-contact[data-tooltip]::before,
+[data-tooltip-position="right"] .wpslt-fc-button[data-tooltip]::before {
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+[data-tooltip-position="right"] .wpslt-fc-contact[data-tooltip]::after,
+[data-tooltip-position="right"] .wpslt-fc-button[data-tooltip]::after {
+    left: calc(100% + 4px);
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: var(--wpslt-fc-tooltip-bg);
+}
+
+
+/* Show Tooltip on Hover */
+.wpslt-fc-contact[data-tooltip]:hover::before,
+.wpslt-fc-contact[data-tooltip]:hover::after,
+.wpslt-fc-button[data-tooltip]:hover::before,
+.wpslt-fc-button[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Always Show Tooltips */
+.wpslt-tooltip-always .wpslt-fc-contact[data-tooltip]::before,
+.wpslt-tooltip-always .wpslt-fc-contact[data-tooltip]::after,
+.wpslt-tooltip-always .wpslt-fc-button[data-tooltip]::before,
+.wpslt-tooltip-always .wpslt-fc-button[data-tooltip]::after {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Hidden Toggle Button Mode */
+.wpslt-hide-toggle-button .wpslt-fc-contacts {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+
+/* ========================================
+   CUSTOM CONTACT SIZING
+   ======================================== */
+
+/* Custom Contact Item Sizing - only when enabled via admin */
+.wpslt-fc-custom-contact-size .wpslt-fc-contact {
+    width: var(--wpslt-fc-contact-size);
+    height: var(--wpslt-fc-contact-size);
+}
+
+.wpslt-fc-custom-contact-size .wpslt-fc-contact i {
+    font-size: var(--wpslt-fc-contact-icon-size);
+}
+
+/* ========================================
+   CUSTOM ICON IMAGES
+   ======================================== */
+
+/* Custom Icon Images */
+.wpslt-fc-custom-icon {
+    width: var(--wpslt-fc-icon-size);
+    height: var(--wpslt-fc-icon-size);
+    object-fit: contain;
+}
+
+.wpslt-fc-contact .wpslt-fc-custom-icon {
+    width: var(--wpslt-fc-contact-icon-size);
+    height: var(--wpslt-fc-contact-icon-size);
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+
+/* Keyboard Navigation */
+.wpslt-fc-button:focus-visible,
+.wpslt-fc-contact:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+}
+
+/* High Contrast Mode - Enhanced in class-contact-output.php */
+/* Additional border styling is generated when high_contrast_mode is enabled */
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+
+    /* Mobile overrides are set via PHP in generate_inline_css() */
+    /* Default mobile sizing if no overrides */
+    .wpslt-floating-contact {
+        --wpslt-fc-button-size: 50px;
+        --wpslt-fc-icon-size: 22px;
+        --wpslt-fc-contact-size: 50px;
+        --wpslt-fc-contact-icon-size: 22px;
+    }
+
+    .wpslt-floating-contact:not(.wpslt-tooltip-mobile-visible) .wpslt-fc-contact[data-tooltip]::before,
+    .wpslt-floating-contact:not(.wpslt-tooltip-mobile-visible) .wpslt-fc-button[data-tooltip]::before {
+        display: none;
+    }
+
+    .wpslt-floating-contact:not(.wpslt-tooltip-mobile-visible) .wpslt-fc-contact[data-tooltip]::after,
+    .wpslt-floating-contact:not(.wpslt-tooltip-mobile-visible) .wpslt-fc-button[data-tooltip]::after {
+        display: none;
+    }
+}
+
+/* Hide on specific devices */
+@media (max-width: 768px) {
+    .wpslt-fc-hide-mobile {
+        display: none !important;
+    }
+}
+
+@media (min-width: 769px) {
+    .wpslt-fc-hide-desktop {
+        display: none !important;
+    }
+}

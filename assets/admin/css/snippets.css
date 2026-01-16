@@ -1,0 +1,516 @@
+/**
+ * WP Slatan Theme - Snippets Admin Styles
+ * Matches base.css design language
+ *
+ * @package WP_Slatan_Theme
+ * @since 1.0.0
+ */
+
+/* ========================================
+   Page Header
+   ======================================== */
+.wpslt-snippets-wrap {
+    margin: 20px 20px 20px 0;
+}
+
+.wpslt-snippets-wrap h1 .page-title-action {
+    margin-left: auto;
+}
+
+/* ========================================
+   Notice Messages
+   ======================================== */
+.wpslt-snippets-wrap .notice {
+    margin: 15px 0;
+    color: #1d2327;
+}
+
+.wpslt-snippets-wrap .notice p {
+    color: #1d2327;
+}
+
+/* ========================================
+   Tabs Navigation
+   ======================================== */
+.wpslt-snippets-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+    border-bottom: 2px solid #E41E26;
+}
+
+.wpslt-snippets-tab {
+    padding: 12px 24px;
+    background: #f0f0f1;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #50575e;
+    border-radius: 6px 6px 0 0;
+    margin-right: 4px;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.wpslt-snippets-tab:hover {
+    background: #e0e0e0;
+    color: #1d2327;
+}
+
+.wpslt-snippets-tab.active {
+    background: #E41E26;
+    color: #fff;
+}
+
+.wpslt-snippets-tab .count {
+    margin-left: 4px;
+    opacity: 0.8;
+}
+
+/* ========================================
+   Tab Content
+   ======================================== */
+.wpslt-snippets-tab-content {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    padding: 10px;
+}
+
+/* ========================================
+   Tab Toolbar
+   ======================================== */
+.wpslt-snippets-toolbar {
+    padding: 15px 20px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wpslt-snippets-title {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+/* .wpslt-snippets-toolbar .button-primary {
+    background: #E41E26;
+    border-color: #E41E26;
+}
+
+.wpslt-snippets-toolbar .button-primary:hover,
+.wpslt-snippets-toolbar .button-primary:focus {
+    background: #c41920;
+    border-color: #c41920;
+} */
+
+/* ========================================
+   Bulk Actions Bar
+   ======================================== */
+.wpslt-bulk-actions {
+    padding: 10px 15px;
+    background: #f9f9f9;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.wpslt-bulk-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpslt-bulk-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.wpslt-bulk-right label {
+    margin: 0;
+    color: #666;
+    font-size: 13px;
+}
+
+.wpslt-bulk-actions select {
+    min-width: 100px;
+    padding: 4px 8px;
+    border: 1px solid #8c8f94;
+    border-radius: 3px;
+    background: #fff;
+}
+
+.wpslt-bulk-actions .button.action {
+    padding: 4px 12px;
+}
+
+.wpslt-selected-count {
+    margin-left: 10px;
+    color: #666;
+    font-size: 13px;
+}
+
+.wpslt-selected-count strong {
+    color: #E41E26;
+    font-weight: 600;
+}
+
+/* Checkbox column */
+.wpslt-snippets-wrap .check-column {
+    width: 40px;
+    text-align: center;
+    padding: 10px;
+}
+
+.wpslt-snippets-wrap .check-column input[type="checkbox"] {
+    margin: 0;
+}
+
+.wpslt-snippets-tab-content .wp-list-table {
+    margin-top: 0;
+    border: none;
+    border-radius: 0;
+}
+
+/* ========================================
+   Table Styling
+   ======================================== */
+.wpslt-snippets-wrap .wp-list-table {
+    margin-top: 20px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+}
+
+.wpslt-snippets-wrap .wp-list-table thead th {
+    background: #f0f0f1;
+    color: #1d2327;
+    font-weight: 600;
+    font-size: 13px;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+.wpslt-snippets-wrap .wp-list-table tbody td {
+    padding: 14px 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.wpslt-snippets-wrap .wp-list-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.wpslt-snippets-wrap .wp-list-table tbody tr:hover {
+    background: #f8f8f8;
+}
+
+/* ========================================
+   Table Columns
+   ======================================== */
+.wpslt-snippets-wrap .column-name {
+    width: 35%;
+}
+
+.wpslt-snippets-wrap .column-scope {
+    width: 15%;
+}
+
+.wpslt-snippets-wrap .column-priority {
+    width: 10%;
+    text-align: center;
+}
+
+.wpslt-snippets-wrap .column-status {
+    width: 15%;
+}
+
+.wpslt-snippets-wrap .column-modified {
+    width: 15%;
+    color: #50575e;
+    font-size: 13px;
+}
+
+/* ========================================
+   Snippet Name & Actions
+   ======================================== */
+.wpslt-snippets-wrap .column-name strong a {
+    color: #1d2327;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.wpslt-snippets-wrap .column-name strong a:hover {
+    color: #E41E26;
+}
+
+.wpslt-snippets-wrap .row-actions {
+    margin-top: 6px;
+}
+
+.wpslt-snippets-wrap .row-actions a {
+    color: #50575e;
+    text-decoration: none;
+    font-size: 12px;
+}
+
+.wpslt-snippets-wrap .row-actions a:hover {
+    color: #E41E26;
+}
+
+.wpslt-snippets-wrap .row-actions .delete a:hover {
+    color: #b32d2e;
+}
+
+/* ========================================
+   Status Badges
+   ======================================== */
+.snippet-status-active {
+    color: #00a32a;
+    font-weight: 500;
+}
+
+.snippet-status-inactive {
+    color: #996600;
+}
+
+/* ========================================
+   Scope Badges
+   ======================================== */
+.snippet-scope {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.snippet-scope-site-css {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.snippet-scope-admin-css {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.snippet-scope-site-head-js {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.snippet-scope-site-footer-js {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+/* ========================================
+   Inactive Row
+   ======================================== */
+.wpslt-snippets-wrap tr.snippet-inactive {
+    background: #f9f9f9;
+}
+
+.wpslt-snippets-wrap tr.snippet-inactive td {
+    opacity: 0.7;
+}
+
+.wpslt-snippets-wrap tr.snippet-inactive:hover td {
+    opacity: 1;
+}
+
+/* ========================================
+   Edit Form Card
+   ======================================== */
+#wpslt-snippet-form {
+    background: #fff;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+#wpslt-snippet-form .form-table {
+    margin: 0;
+}
+
+#wpslt-snippet-form .form-table th {
+    width: 150px;
+    padding: 15px 10px 15px 0;
+    font-weight: 600;
+    color: #1d2327;
+    vertical-align: top;
+}
+
+#wpslt-snippet-form .form-table td {
+    padding: 12px 0;
+}
+
+#wpslt-snippet-form input[type="text"],
+#wpslt-snippet-form input[type="number"],
+#wpslt-snippet-form select {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-size: 14px;
+}
+
+#wpslt-snippet-form input[type="text"]:focus,
+#wpslt-snippet-form input[type="number"]:focus,
+#wpslt-snippet-form select:focus {
+    border-color: #E41E26;
+    box-shadow: 0 0 0 1px #E41E26;
+    outline: none;
+}
+
+#wpslt-snippet-form select {
+    min-width: 200px;
+}
+
+#wpslt-snippet-form .description {
+    color: #646970;
+    font-size: 13px;
+    margin-top: 6px;
+}
+
+/* ========================================
+   Form Buttons
+   ======================================== */
+#wpslt-snippet-form .submit {
+    margin-top: 20px;
+    padding-top: 20px;
+    padding-bottom: 0px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+}
+
+#wpslt-snippet-form .button-primary {
+    /* background: #E41E26;
+    border-color: #E41E26; */
+    color: #fff;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 4px;
+}
+
+#wpslt-snippet-form .button-primary:hover,
+#wpslt-snippet-form .button-primary:focus {
+    /* background: #c41920;
+    border-color: #c41920; */
+    color: #fff;
+}
+
+#wpslt-snippet-form .button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: normal;
+    text-decoration: none;
+}
+
+/* ========================================
+   Checkbox
+   ======================================== */
+#wpslt-snippet-form label {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ========================================
+   CodeMirror Container
+   ======================================== */
+.CodeMirror {
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    height: 400px;
+    font-size: 13px;
+}
+
+.CodeMirror-focused {
+    border-color: #E41E26;
+    box-shadow: 0 0 0 1px #E41E26;
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+.wpslt-snippets-wrap .wp-list-table tbody td[colspan] {
+    text-align: center;
+    padding: 40px;
+    color: #50575e;
+}
+
+/* ========================================
+   Pagination Controls
+   ======================================== */
+.wpslt-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: #f9f9f9;
+    border-top: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.wpslt-pagination-info {
+    color: #666;
+    font-size: 13px;
+}
+
+.wpslt-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wpslt-pagination-controls label {
+    color: #666;
+    font-size: 13px;
+}
+
+.wpslt-pagination-controls select {
+    padding: 4px 8px;
+    border: 1px solid #8c8f94;
+    border-radius: 3px;
+    background: #fff;
+}
+
+.wpslt-page-info {
+    padding: 0 10px;
+    color: #1d2327;
+    font-weight: 500;
+}
+
+.wpslt-pagination-controls .button.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media screen and (max-width: 782px) {
+    .wpslt-snippets-wrap {
+        margin-right: 10px;
+    }
+
+    #wpslt-snippet-form {
+        padding: 15px;
+    }
+}

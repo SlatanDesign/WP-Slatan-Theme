@@ -1,0 +1,687 @@
+/**
+ * Cookie Consent Styles
+ *
+ * @package WP_Slatan_Theme
+ * @since 1.0.22
+ */
+
+/* ==========================================================================
+   CSS Variables
+   ========================================================================== */
+
+.wpslt-cookie-banner {
+    --wpslt-cookie-bg: #1a1a2e;
+    --wpslt-cookie-text: #ffffff;
+    --wpslt-cookie-accept-bg: #16a085;
+    --wpslt-cookie-accept-text: #ffffff;
+    --wpslt-cookie-reject-bg: #e74c3c;
+    --wpslt-cookie-reject-text: #ffffff;
+    --wpslt-cookie-settings-text: #ffffff;
+    --wpslt-cookie-border-radius: 8px;
+    --wpslt-cookie-transition: all 0.3s ease;
+}
+
+/* ==========================================================================
+   Banner Base Styles
+   ========================================================================== */
+
+.wpslt-cookie-banner {
+    position: fixed;
+    z-index: 999999;
+    background-color: var(--wpslt-cookie-bg);
+    color: var(--wpslt-cookie-text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    box-sizing: border-box;
+}
+
+.wpslt-cookie-banner *,
+.wpslt-cookie-banner *::before,
+.wpslt-cookie-banner *::after {
+    box-sizing: border-box;
+}
+
+.wpslt-cookie-banner-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+}
+
+.wpslt-cookie-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.wpslt-cookie-title {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: inherit;
+}
+
+.wpslt-cookie-message {
+    margin: 0;
+    color: inherit;
+    opacity: 0.9;
+}
+
+.wpslt-cookie-read-more {
+    color: inherit;
+    text-decoration: underline;
+    margin-left: 5px;
+}
+
+.wpslt-cookie-read-more:hover {
+    opacity: 0.8;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.wpslt-cookie-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.wpslt-cookie-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border: none;
+    border-radius: var(--wpslt-cookie-border-radius);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--wpslt-cookie-transition);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.wpslt-cookie-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.wpslt-cookie-btn:active {
+    transform: translateY(0);
+}
+
+.wpslt-cookie-accept-btn {
+    background-color: var(--wpslt-cookie-accept-bg);
+    color: var(--wpslt-cookie-accept-text);
+}
+
+.wpslt-cookie-reject-btn {
+    background-color: var(--wpslt-cookie-reject-bg);
+    color: var(--wpslt-cookie-reject-text);
+}
+
+.wpslt-cookie-settings-btn {
+    background-color: transparent;
+    color: var(--wpslt-cookie-settings-text);
+    border: 1px solid currentColor;
+}
+
+.wpslt-cookie-settings-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ==========================================================================
+   Banner Positions
+   ========================================================================== */
+
+/* Bar - Bottom */
+.wpslt-cookie-bar.wpslt-cookie-bottom {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Bar - Top */
+.wpslt-cookie-bar.wpslt-cookie-top {
+    top: 0;
+    left: 0;
+    right: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Popup - Center */
+.wpslt-cookie-popup {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 500px;
+    width: calc(100% - 40px);
+    border-radius: var(--wpslt-cookie-border-radius);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.wpslt-cookie-popup .wpslt-cookie-banner-inner {
+    flex-direction: column;
+    text-align: center;
+}
+
+.wpslt-cookie-popup .wpslt-cookie-buttons {
+    justify-content: center;
+    width: 100%;
+}
+
+/* Widget - Bottom Left */
+.wpslt-cookie-widget.wpslt-cookie-left {
+    bottom: 20px;
+    left: 20px;
+    max-width: 380px;
+    border-radius: var(--wpslt-cookie-border-radius);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Widget - Bottom Right */
+.wpslt-cookie-widget.wpslt-cookie-right {
+    bottom: 20px;
+    right: 20px;
+    max-width: 380px;
+    border-radius: var(--wpslt-cookie-border-radius);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.wpslt-cookie-widget .wpslt-cookie-banner-inner {
+    flex-direction: column;
+}
+
+.wpslt-cookie-widget .wpslt-cookie-buttons {
+    width: 100%;
+    flex-direction: column;
+}
+
+.wpslt-cookie-widget .wpslt-cookie-btn {
+    width: 100%;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+/* Hidden state */
+.wpslt-cookie-hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Slide animation */
+.wpslt-cookie-anim-slide.wpslt-cookie-bar.wpslt-cookie-bottom {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s;
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-bar.wpslt-cookie-bottom.wpslt-cookie-hidden {
+    transform: translateY(100%);
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-bar.wpslt-cookie-top {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s;
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-bar.wpslt-cookie-top.wpslt-cookie-hidden {
+    transform: translateY(-100%);
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-popup {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s;
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-popup.wpslt-cookie-hidden {
+    transform: translate(-50%, -40%);
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-widget.wpslt-cookie-left {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s;
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-widget.wpslt-cookie-left.wpslt-cookie-hidden {
+    transform: translateX(-120%);
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-widget.wpslt-cookie-right {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease, visibility 0.4s;
+}
+
+.wpslt-cookie-anim-slide.wpslt-cookie-widget.wpslt-cookie-right.wpslt-cookie-hidden {
+    transform: translateX(120%);
+}
+
+/* Fade animation */
+.wpslt-cookie-anim-fade {
+    transition: opacity 0.4s ease, visibility 0.4s;
+}
+
+/* ==========================================================================
+   Overlay
+   ========================================================================== */
+
+.wpslt-cookie-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999998;
+    transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+.wpslt-cookie-overlay.wpslt-cookie-hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   Preferences Modal
+   ========================================================================== */
+
+.wpslt-cookie-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease, visibility 0.3s;
+}
+
+.wpslt-cookie-modal.wpslt-cookie-hidden {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.wpslt-cookie-modal.wpslt-cookie-hidden .wpslt-cookie-modal-dialog {
+    transform: scale(0.95) translateY(10px);
+}
+
+.wpslt-cookie-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    cursor: pointer;
+}
+
+.wpslt-cookie-modal-dialog {
+    position: relative;
+    width: calc(100% - 40px);
+    max-width: 600px;
+    max-height: calc(100vh - 40px);
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wpslt-cookie-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+.wpslt-cookie-modal-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.wpslt-cookie-modal-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: none;
+    background-color: transparent;
+    color: #6b7280;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wpslt-cookie-modal-close:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.wpslt-cookie-modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.wpslt-cookie-modal-description {
+    margin: 0 0 20px;
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+/* ==========================================================================
+   Cookie Categories
+   ========================================================================== */
+
+.wpslt-cookie-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.wpslt-cookie-category {
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.wpslt-cookie-category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.wpslt-cookie-category-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.wpslt-cookie-category-name {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.wpslt-cookie-category-description {
+    margin-top: 8px;
+}
+
+.wpslt-cookie-category-description p {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+
+.wpslt-cookie-always-active {
+    font-size: 12px;
+    font-weight: 600;
+    color: #059669;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Toggle Switch */
+.wpslt-cookie-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 26px;
+    flex-shrink: 0;
+}
+
+.wpslt-cookie-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.wpslt-cookie-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #d1d5db;
+    transition: 0.3s;
+    border-radius: 26px;
+}
+
+.wpslt-cookie-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.wpslt-cookie-switch input:checked+.wpslt-cookie-slider {
+    background-color: #10b981;
+}
+
+.wpslt-cookie-switch input:checked+.wpslt-cookie-slider:before {
+    transform: translateX(22px);
+}
+
+.wpslt-cookie-switch input:focus+.wpslt-cookie-slider {
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
+}
+
+/* ==========================================================================
+   Modal Footer
+   ========================================================================== */
+
+.wpslt-cookie-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+}
+
+.wpslt-cookie-save-btn {
+    background-color: #1f2937;
+    color: #fff;
+}
+
+.wpslt-cookie-save-btn:hover {
+    background-color: #111827;
+}
+
+.wpslt-cookie-accept-all-btn {
+    background-color: #10b981;
+    color: #fff;
+}
+
+.wpslt-cookie-accept-all-btn:hover {
+    background-color: #059669;
+}
+
+/* ==========================================================================
+   Revisit Button
+   ========================================================================== */
+
+.wpslt-cookie-revisit {
+    position: fixed;
+    z-index: 999997;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background-color: #1f2937;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.wpslt-cookie-revisit:hover {
+    background-color: #111827;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+}
+
+.wpslt-cookie-revisit svg {
+    flex-shrink: 0;
+}
+
+.wpslt-cookie-revisit.wpslt-cookie-hidden {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+/* Revisit Position */
+.wpslt-cookie-revisit-bottom-left {
+    bottom: 20px;
+    left: 20px;
+}
+
+.wpslt-cookie-revisit-bottom-right {
+    bottom: 20px;
+    right: 20px;
+}
+
+.wpslt-cookie-revisit-top-left {
+    top: 20px;
+    left: 20px;
+}
+
+.wpslt-cookie-revisit-top-right {
+    top: 20px;
+    right: 20px;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .wpslt-cookie-banner-inner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .wpslt-cookie-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .wpslt-cookie-btn {
+        width: 100%;
+    }
+
+    .wpslt-cookie-widget.wpslt-cookie-left,
+    .wpslt-cookie-widget.wpslt-cookie-right {
+        left: 10px;
+        right: 10px;
+        bottom: 10px;
+        max-width: none;
+    }
+
+    .wpslt-cookie-modal-dialog {
+        width: calc(100% - 20px);
+        max-height: calc(100vh - 20px);
+    }
+
+    .wpslt-cookie-modal-header {
+        padding: 16px 20px;
+    }
+
+    .wpslt-cookie-modal-body {
+        padding: 20px;
+    }
+
+    .wpslt-cookie-modal-footer {
+        flex-direction: column;
+        padding: 12px 20px;
+    }
+
+    .wpslt-cookie-revisit-text {
+        display: none;
+    }
+
+    .wpslt-cookie-revisit {
+        padding: 12px;
+        border-radius: 50%;
+    }
+}
+
+/* ==========================================================================
+   Accessibility
+   ========================================================================== */
+
+.wpslt-cookie-btn:focus,
+.wpslt-cookie-modal-close:focus,
+.wpslt-cookie-revisit:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .wpslt-cookie-banner,
+    .wpslt-cookie-modal,
+    .wpslt-cookie-modal-dialog,
+    .wpslt-cookie-overlay,
+    .wpslt-cookie-btn,
+    .wpslt-cookie-revisit,
+    .wpslt-cookie-slider,
+    .wpslt-cookie-slider:before {
+        transition: none;
+    }
+}
+
+/* ==========================================================================
+   Settings Trigger Shortcode
+   ========================================================================== */
+
+.wpslt-cookie-settings-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background-color: transparent;
+    color: inherit;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.wpslt-cookie-settings-trigger:hover {
+    opacity: 0.8;
+}

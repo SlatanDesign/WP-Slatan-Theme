@@ -1,0 +1,52 @@
+<?php
+/**
+ * WPSLT Rescue Script
+ * 
+ * Usage:
+ * 1. Place this file in your WordPress root directory (where wp-config.php is).
+ * 2. Open it in your browser (e.g., https://your-site.com/wpslt-rescue.php).
+ * 3. It will deactivate all PHP snippets in the database.
+ * 4. DELETE this file immediately after use.
+ */
+
+// Define Safe Mode to prevent snippets from running during this request
+define('WPSLT_SAFE_MODE', true);
+
+// Attempt to load WordPress
+if (file_exists('./wp-load.php')) {
+    require_once('./wp-load.php');
+} else {
+    die('Error: Could not find wp-load.php. Please ensure this file is in your WordPress root directory.');
+}
+
+global $wpdb;
+$table_name = $wpdb->prefix . 'wpslt_snippets';
+
+// Title
+echo '<div style="font-family: sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px;">';
+echo '<h2>WPSLT Snippet Rescue</h2>';
+
+// Check Table
+if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+    echo "<p style='color: red;'>Error: Table <code>$table_name</code> not found.</p>";
+    echo "</div>";
+    exit;
+}
+
+// Execute Reset
+// We set active = 0 for all PHP snippets
+$sql = "UPDATE $table_name SET active = 0 WHERE scope LIKE 'php-%'";
+$result = $wpdb->query($sql);
+
+if ($result !== false) {
+    echo "<p style='color: green; font-weight: bold;'>Success!</p>";
+    echo "<p>Deactivated <strong>$result</strong> PHP snippets.</p>";
+    echo "<p>Your site should now be accessible.</p>";
+} else {
+    echo "<p style='color: red;'>Database Error: " . htmlspecialchars($wpdb->last_error) . "</p>";
+}
+
+echo '<hr>';
+echo '<p style="color: #666;">Note: This code does not delete the snippets, only deactivates them so you can login and fix the code.</p>';
+echo '<p style="color: red; font-weight: bold;">IMPORTANT: Please delete this file from your server immediately.</p>';
+echo '</div>';

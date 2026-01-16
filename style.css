@@ -1,0 +1,296 @@
+/*!
+Theme Name: WP Slatan Theme
+Theme URI: https://slatan.design/
+Author: Slatan Design
+Author URI: https://slatan.design/
+Description: Lightweight, secure WordPress theme with full Elementor support. Built for speed and 100% Elementor compatibility.
+Version: 1.0.22
+Requires at least: 6.0
+Tested up to: 6.7
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: wp-slatan-theme
+Tags: elementor, page-builder, full-width-template, custom-logo, custom-menu, featured-images, translation-ready
+
+This theme is licensed under the GPL.
+WP Slatan Theme is based on Underscores https://underscores.me/
+*/
+
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# CSS Variables
+# Reset / Normalize
+# Base Elements
+# Accessibility
+# Elementor Compatibility
+# Default Header (fallback)
+# Default Footer (fallback)
+--------------------------------------------------------------*/
+
+/*--------------------------------------------------------------
+# CSS Variables
+--------------------------------------------------------------*/
+:root {
+    --wpslt-primary: #E41E26;
+    --wpslt-secondary: #1a1a1a;
+    --wpslt-text: #333333;
+    --wpslt-text-light: #666666;
+    --wpslt-background: #ffffff;
+    --wpslt-border: #e0e0e0;
+    --wpslt-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    --wpslt-container-width: 1140px;
+}
+
+/*--------------------------------------------------------------
+# Reset / Normalize
+--------------------------------------------------------------*/
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: var(--wpslt-font-family);
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--wpslt-text);
+    background-color: var(--wpslt-background);
+}
+
+main {
+    display: block;
+}
+
+/*--------------------------------------------------------------
+# Base Elements
+--------------------------------------------------------------*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+a {
+    color: var(--wpslt-primary);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover,
+a:focus {
+    color: var(--wpslt-secondary);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-style: none;
+}
+
+figure {
+    margin: 0;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+    -webkit-appearance: button;
+    cursor: pointer;
+}
+
+/*--------------------------------------------------------------
+# Accessibility
+--------------------------------------------------------------*/
+.screen-reader-text {
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute !important;
+    width: 1px;
+    word-wrap: normal !important;
+}
+
+.screen-reader-text:focus {
+    background-color: #f1f1f1;
+    border-radius: 3px;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+    clip: auto !important;
+    clip-path: none;
+    color: #21759b;
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 700;
+    height: auto;
+    left: 5px;
+    line-height: normal;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000;
+}
+
+.skip-link:focus {
+    background-color: #f1f1f1;
+    box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+    clip: auto !important;
+    clip-path: none;
+    color: #21759b;
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    height: auto;
+    left: 5px;
+    padding: 15px 23px 14px;
+    text-decoration: none;
+    top: 5px;
+    width: auto;
+    z-index: 100000;
+}
+
+/*--------------------------------------------------------------
+# Content Container (for Block Editor / non-Elementor)
+--------------------------------------------------------------*/
+.site-main>.container {
+    max-width: var(--wpslt-container-width);
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.site-main .entry-content {
+    max-width: 100%;
+}
+
+/* Block Editor alignment support */
+.entry-content>.alignwide {
+    max-width: calc(var(--wpslt-container-width) + 200px);
+    margin-left: calc(-100px);
+    margin-right: calc(-100px);
+    width: calc(100% + 200px);
+}
+
+.entry-content>.alignfull {
+    max-width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    width: 100vw;
+}
+
+/*--------------------------------------------------------------
+# Elementor Compatibility
+--------------------------------------------------------------*/
+/* Ensure full-width sections work properly */
+.elementor-page .site-main,
+.elementor-page .entry-content {
+    margin: 0;
+    padding: 0;
+    max-width: none;
+}
+
+.elementor-page .site-main>.container {
+    max-width: none;
+    padding: 0;
+}
+
+/* Canvas template - completely blank */
+.wpslt-canvas-template {
+    margin: 0;
+    padding: 0;
+}
+
+/* Full width template */
+.wpslt-full-width .site-main {
+    max-width: none;
+    padding: 0;
+}
+
+/*--------------------------------------------------------------
+# Default Header (fallback when Elementor header not set)
+--------------------------------------------------------------*/
+.site-header {
+    background: var(--wpslt-background);
+    border-bottom: 1px solid var(--wpslt-border);
+    padding: 1rem 0;
+}
+
+.site-header .container {
+    max-width: var(--wpslt-container-width);
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.site-branding .site-title {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.site-branding .site-title a {
+    color: var(--wpslt-secondary);
+}
+
+.site-branding .site-description {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--wpslt-text-light);
+}
+
+/*--------------------------------------------------------------
+# Default Footer (fallback when Elementor footer not set)
+--------------------------------------------------------------*/
+.site-footer {
+    background: var(--wpslt-secondary);
+    color: #ffffff;
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.site-footer a {
+    color: #ffffff;
+}
+
+.site-footer a:hover {
+    color: var(--wpslt-primary);
+}
+
+.site-info {
+    font-size: 0.875rem;
+}

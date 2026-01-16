@@ -1,0 +1,926 @@
+/**
+ * Floating Contact Admin Styles
+ *
+ * @package WP_Slatan_Theme
+ * @since 1.0.2
+ */
+
+/* Layout */
+.wpslt-contact-wrap {
+    /* max-width: 1400px; */
+    margin: 20px 20px 20px 0;
+}
+
+
+.wpslt-fc-page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #E41E26 0%, #c9171e 100%);
+    border-radius: 8px;
+    color: #fff;
+}
+
+.wpslt-fc-page-header h1 {
+    color: #fff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.wpslt-fc-page-header .dashicons {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+}
+
+.wpslt-fc-page-header .wpslt-tagline {
+    margin: 0.25rem 0 0;
+    opacity: 0.9;
+}
+
+.wpslt-contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 1200px) {
+    .wpslt-contact-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Settings Panel */
+.wpslt-contact-settings {
+    min-width: 0;
+}
+
+/* Preview Panel */
+.wpslt-contact-preview {
+    position: sticky;
+    top: 40px;
+}
+
+.wpslt-contact-preview .wpslt-preview-panel {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 32px;
+    height: fit-content;
+}
+
+.wpslt-contact-preview .wpslt-preview-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 16px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e5e7eb;
+    border-radius: 8px 8px 0 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.wpslt-contact-preview .wpslt-preview-title .dashicons {
+    color: #6b7280;
+}
+
+.wpslt-contact-preview .wpslt-preview-container {
+    padding: 20px;
+}
+
+.wpslt-contact-preview .wpslt-preview-wrapper {
+    border-radius: 8px;
+    overflow: visible;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.wpslt-contact-preview .wpslt-preview-browser {
+    background: #1f2937;
+    border-radius: 8px;
+    overflow: visible;
+}
+
+.wpslt-contact-preview .wpslt-preview-browser-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: #374151;
+}
+
+.wpslt-contact-preview .wpslt-preview-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #6b7280;
+}
+
+.wpslt-contact-preview .wpslt-preview-dot:nth-child(1) {
+    background: #ef4444;
+}
+
+.wpslt-contact-preview .wpslt-preview-dot:nth-child(2) {
+    background: #f59e0b;
+}
+
+.wpslt-contact-preview .wpslt-preview-dot:nth-child(3) {
+    background: #10b981;
+}
+
+.wpslt-contact-preview .wpslt-preview-content {
+    position: relative;
+    min-height: 350px;
+    background: #f3f4f6;
+    overflow: hidden;
+    transition: height 0.3s ease;
+}
+
+.wpslt-contact-preview .wpslt-preview-page {
+    padding: 20px;
+}
+
+.wpslt-contact-preview .wpslt-preview-placeholder {
+    height: 16px;
+    background: #d1d5db;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.wpslt-contact-preview .wpslt-preview-placeholder.short {
+    width: 60%;
+}
+
+/* Contacts List */
+.wpslt-contacts-list {
+    margin-bottom: 1rem;
+}
+
+.wpslt-contact-item {
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.wpslt-contact-item:last-child {
+    margin-bottom: 0;
+}
+
+.wpslt-contact-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: #f6f7f7;
+    border-bottom: 1px solid #dcdcde;
+    cursor: pointer;
+}
+
+.wpslt-contact-item .wpslt-contact-header {
+    margin: 0;
+    border-radius: 3px 3px 0 0;
+}
+
+.wpslt-contact-item.collapsed .wpslt-contact-header {
+    border-bottom: none;
+    border-radius: 3px;
+}
+
+.wpslt-contact-drag {
+    cursor: grab;
+    color: #787c82;
+}
+
+.wpslt-contact-drag:active {
+    cursor: grabbing;
+}
+
+.wpslt-contact-icon {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+}
+
+.wpslt-contact-title {
+    flex: 1;
+    font-weight: 500;
+}
+
+.wpslt-contact-toggle,
+.wpslt-contact-delete {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #787c82;
+    font-size: 16px;
+    width: 20px;
+    height: 20px;
+}
+
+.wpslt-contact-toggle:hover,
+.wpslt-contact-delete:hover {
+    color: #2271b1;
+}
+
+.wpslt-contact-delete:hover {
+    color: #d63638;
+}
+
+.wpslt-contact-body {
+    padding: 1rem;
+}
+
+.wpslt-contact-item.collapsed .wpslt-contact-body {
+    display: none;
+}
+
+.wpslt-contact-body .form-table {
+    margin: 0;
+}
+
+.wpslt-contact-body .form-table th {
+    width: 250px;
+    padding: 0.5rem 0;
+}
+
+.wpslt-contact-body .form-table td {
+    padding: 0.5rem 0;
+}
+
+/* Add Contact */
+.wpslt-add-contact {
+    display: flex;
+    gap: 10px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f1;
+    margin-top: 15px;
+    align-items: stretch;
+}
+
+.wpslt-add-contact select {
+    min-width: 200px;
+    height: 40px !important;
+    line-height: 1.5;
+    padding: 0 12px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    color: #3c434a;
+    font-size: 14px;
+}
+
+.wpslt-add-contact select:focus {
+    color: #2c3338;
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+    outline: none;
+}
+
+.wpslt-add-contact .button {
+    height: 40px !important;
+    line-height: 38px !important;
+    /* height - 2px border */
+    padding: 0 16px !important;
+    font-size: 14px !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 4px !important;
+    background: #2271b1 !important;
+    color: #fff !important;
+    border-color: #2271b1 !important;
+    transition: all 0.2s ease !important;
+}
+
+.wpslt-add-contact .button:hover {
+    background: #135e96 !important;
+    border-color: #135e96 !important;
+    transform: translateY(-1px);
+}
+
+.wpslt-add-contact .button:active {
+    background: #0a4b78 !important;
+    transform: translateY(0);
+}
+
+.wpslt-add-contact .button .dashicons {
+    width: 20px;
+    height: 20px;
+    font-size: 20px;
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Unit Input */
+.wpslt-unit-input {
+    display: flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.wpslt-unit-input input[type="number"] {
+    width: 80px;
+}
+
+.wpslt-unit-input select {
+    min-width: 60px;
+}
+
+/* Color Picker Fixes */
+.wpslt-contact-body .wp-picker-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Sortable Placeholder */
+.wpslt-contact-item.ui-sortable-placeholder {
+    background: #f0f6fc;
+    border: 2px dashed #2271b1;
+    visibility: visible !important;
+    height: 50px;
+}
+
+/* Page Select */
+.wpslt-page-select {
+    width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+    .wpslt-contact-header {
+        flex-wrap: wrap;
+    }
+
+    .wpslt-contact-body .form-table th,
+    .wpslt-contact-body .form-table td {
+        display: block;
+        width: 100%;
+    }
+}
+
+/* ========================================
+   ICON PICKER & PREVIEW
+   ======================================== */
+/* Icon Picker Input Group */
+.wpslt-icon-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+    background: #fff;
+    width: 100%;
+    max-width: 400px;
+    padding: 2px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.wpslt-icon-input-wrapper:focus-within {
+    border-color: #2271b1;
+    box-shadow: 0 0 0 1px #2271b1;
+}
+
+.wpslt-icon-preview {
+    width: 36px;
+    height: 36px;
+    background: #f0f0f1;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #3c434a;
+    flex-shrink: 0;
+    margin-right: 8px;
+}
+
+.wpslt-icon-preview i {
+    width: auto;
+    height: auto;
+}
+
+.wpslt-icon-picker-input {
+    flex: 1;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    margin: 0 !important;
+    padding: 0 8px !important;
+    min-width: 0;
+    /* styling fix for flex child */
+}
+
+.wpslt-icon-picker-input:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+.wpslt-icon-picker-btn {
+    padding: 0 10px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px !important;
+    background: #fff !important;
+    border: none !important;
+    border-left: 1px solid #f0f0f1 !important;
+    border-radius: 0 3px 3px 0 !important;
+    color: #2271b1 !important;
+    cursor: pointer;
+    box-shadow: none !important;
+    margin: 0 !important;
+}
+
+.wpslt-icon-picker-btn:hover {
+    background: #f0f6fc !important;
+    color: #0a4b78 !important;
+}
+
+.wpslt-icon-picker-btn .dashicons {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+}
+
+/* Drawer / Slide-over */
+.wpslt-icon-drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 100000;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.wpslt-icon-drawer-overlay.open {
+    display: block;
+    opacity: 1;
+}
+
+.wpslt-icon-drawer {
+    position: fixed;
+    top: 0;
+    right: -400px;
+    width: 400px;
+    height: 100%;
+    background: #fff;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 100001;
+    transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: flex;
+    flex-direction: column;
+}
+
+.wpslt-icon-drawer-overlay.open .wpslt-icon-drawer {
+    right: 0;
+}
+
+.wpslt-icon-drawer-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #dcdcde;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f6f7f7;
+}
+
+.wpslt-icon-drawer-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #1d2327;
+}
+
+.wpslt-icon-drawer-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    color: #787c82;
+    transition: color 0.2s;
+}
+
+.wpslt-icon-drawer-close:hover {
+    color: #d63638;
+}
+
+.wpslt-icon-search-box {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f1;
+    position: relative;
+}
+
+.wpslt-icon-search-box input {
+    width: 100%;
+    padding: 8px 35px 8px 10px;
+    font-size: 14px;
+}
+
+.wpslt-icon-search-box .dashicons-search {
+    position: absolute;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #a7aaad;
+    pointer-events: none;
+}
+
+.wpslt-icon-grid {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 10px;
+    align-content: start;
+}
+
+.wpslt-icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    border: 1px solid #dcdcde;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px;
+    transition: all 0.2s;
+    text-align: center;
+}
+
+.wpslt-icon-item:hover {
+    border-color: #2271b1;
+    background: #f0f6fc;
+    color: #2271b1;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.wpslt-icon-item.active {
+    background: #2271b1;
+    color: #fff;
+    border-color: #2271b1;
+}
+
+.wpslt-icon-item i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.wpslt-icon-name {
+    font-size: 10px;
+    color: #646970;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+}
+
+.wpslt-icon-item:hover .wpslt-icon-name {
+    color: #2271b1;
+}
+
+.wpslt-icon-item.active .wpslt-icon-name {
+    color: #fff;
+}
+
+/* ========================================
+   LIVE PREVIEW ANIMATIONS
+   ======================================== */
+
+/* Button Animations */
+.wpslt-animation-pulse {
+    animation: wpslt-preview-pulse 2s infinite !important;
+}
+
+.wpslt-animation-bounce {
+    animation: wpslt-preview-bounce 2s infinite !important;
+}
+
+.wpslt-animation-shake {
+    animation: wpslt-preview-shake 2s infinite !important;
+}
+
+.wpslt-animation-wobble {
+    animation: wpslt-preview-wobble 2s infinite !important;
+}
+
+@keyframes wpslt-preview-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(228, 30, 38, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 15px rgba(228, 30, 38, 0);
+    }
+}
+
+@keyframes wpslt-preview-bounce {
+
+    0%,
+    20%,
+    50%,
+    80%,
+    100% {
+        transform: translateY(0);
+    }
+
+    40% {
+        transform: translateY(-10px);
+    }
+
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes wpslt-preview-shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes wpslt-preview-wobble {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    15% {
+        transform: rotate(-5deg);
+    }
+
+    30% {
+        transform: rotate(3deg);
+    }
+
+    45% {
+        transform: rotate(-3deg);
+    }
+
+    60% {
+        transform: rotate(2deg);
+    }
+
+    75% {
+        transform: rotate(-1deg);
+    }
+}
+
+/* Hover Animations */
+.wpslt-hover-scale:hover,
+.wpslt-hover-scale .wpslt-fc-preview-contact:hover {
+    transform: scale(1.15) !important;
+    transition: transform 0.2s ease;
+}
+
+.wpslt-hover-rotate:hover i,
+.wpslt-hover-rotate .wpslt-fc-preview-contact:hover i {
+    transform: rotate(15deg) !important;
+    transition: transform 0.3s ease;
+}
+
+.wpslt-hover-glow:hover,
+.wpslt-hover-glow .wpslt-fc-preview-contact:hover {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 40px currentColor !important;
+    transform: scale(1.05) !important;
+    transition: all 0.3s ease;
+}
+
+.wpslt-hover-swing:hover i,
+.wpslt-hover-swing .wpslt-fc-preview-contact:hover i {
+    animation: wpslt-preview-swing 0.6s ease-in-out !important;
+}
+
+.wpslt-hover-pop:hover,
+.wpslt-hover-pop .wpslt-fc-preview-contact:hover {
+    animation: wpslt-preview-pop 0.3s ease-out !important;
+}
+
+@keyframes wpslt-preview-swing {
+    20% {
+        transform: rotate(15deg);
+    }
+
+    40% {
+        transform: rotate(-10deg);
+    }
+
+    60% {
+        transform: rotate(5deg);
+    }
+
+    80% {
+        transform: rotate(-5deg);
+    }
+
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes wpslt-preview-pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.25);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+/* ========================================
+   CUSTOM ICON UPLOAD
+   ======================================== */
+
+.wpslt-custom-icon-wrapper {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.wpslt-custom-icon-box {
+    width: 64px;
+    height: 64px;
+    border: 2px dashed #c5c5c5;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    position: relative;
+}
+
+.wpslt-custom-icon-box:hover {
+    border-color: #2271b1;
+    background: #f0f6fc;
+}
+
+/* Placeholder icon */
+.wpslt-custom-icon-box .wpslt-icon-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #a0a5aa;
+    transition: all 0.2s ease;
+}
+
+.wpslt-custom-icon-box:hover .wpslt-icon-placeholder {
+    color: #2271b1;
+}
+
+.wpslt-custom-icon-box .wpslt-icon-placeholder .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.wpslt-custom-icon-box .wpslt-icon-placeholder span {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* Preview image */
+.wpslt-custom-icon-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 6px;
+}
+
+/* Remove button - shows on hover when has image */
+.wpslt-remove-icon-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
+    padding: 0 !important;
+    background: #d63638 !important;
+    color: #fff !important;
+    border: 2px solid #fff !important;
+    border-radius: 50% !important;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+    transition: all 0.15s ease !important;
+    z-index: 10;
+}
+
+.wpslt-remove-icon-btn:hover {
+    background: #a00 !important;
+    transform: scale(1.1);
+}
+
+.wpslt-remove-icon-btn .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    margin: 0;
+    line-height: 1;
+}
+
+/* Show remove button on wrapper hover when has image */
+.wpslt-custom-icon-wrapper.has-image:hover .wpslt-remove-icon-btn {
+    display: flex;
+}
+
+/* When has image, change box style */
+.wpslt-custom-icon-wrapper.has-image .wpslt-custom-icon-box {
+    border-style: solid;
+    border-color: #2271b1;
+    background: #fff;
+}
+
+/* Hide placeholder when has image */
+.wpslt-custom-icon-wrapper.has-image .wpslt-icon-placeholder {
+    display: none;
+}
+
+/* Hide upload button - we don't need it anymore */
+.wpslt-upload-icon-btn {
+    display: none !important;
+}
+
+/* ========================================
+   TOGGLE ANIMATION STYLES FOR PREVIEW
+   ======================================== */
+
+/* Toggle Scale + Rotate - For Live Preview */
+.wpslt-fc-toggle-scale-rotate .wpslt-icon-open,
+.wpslt-fc-toggle-scale-rotate .wpslt-icon-close {
+    transform-origin: center center;
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Keyframes for Scale + Rotate animation */
+@keyframes wpslt-toggle-scale-rotate-in {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    50% {
+        transform: scale(0.7) rotate(180deg);
+    }
+    100% {
+        transform: scale(1) rotate(360deg);
+    }
+}
+
+@keyframes wpslt-toggle-scale-rotate-out {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    100% {
+        transform: scale(0.8) rotate(-360deg);
+    }
+}
