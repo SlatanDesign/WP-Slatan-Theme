@@ -67,7 +67,7 @@ class WPSLT_Cookie_Admin
     {
         return array(
             // General
-            'enabled' => true,
+            'enabled' => false,
             'cookie_name' => 'wpslt_cookie_consent',
             'cookie_expiry' => 365,
             'show_revisit' => true,
