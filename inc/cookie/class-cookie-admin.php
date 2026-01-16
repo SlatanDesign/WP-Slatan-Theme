@@ -120,6 +120,26 @@ class WPSLT_Cookie_Admin
                     'default_state' => false,
                 ),
             ),
+
+            // Scripts - Built-in Integrations
+            'google_analytics_id' => '',
+            'google_tag_manager_id' => '',
+            'facebook_pixel_id' => '',
+            'tiktok_pixel_id' => '',
+
+            // Scripts - Custom Scripts per Category
+            'head_scripts_necessary' => '',
+            'head_scripts_analytics' => '',
+            'head_scripts_marketing' => '',
+            'body_scripts_necessary' => '',
+            'body_scripts_analytics' => '',
+            'body_scripts_marketing' => '',
+
+            // Scripts - URL Pattern Blocking
+            'block_patterns' => array(),
+
+            // Auto-blocking
+            'auto_block_known_scripts' => true,
         );
     }
 
@@ -270,6 +290,62 @@ class WPSLT_Cookie_Admin
             $sanitized['categories'] = $defaults['categories'];
         }
 
+        // Scripts - Built-in Integrations
+        $sanitized['google_analytics_id'] = isset($input['google_analytics_id'])
+            ? sanitize_text_field($input['google_analytics_id'])
+            : '';
+        $sanitized['google_tag_manager_id'] = isset($input['google_tag_manager_id'])
+            ? sanitize_text_field($input['google_tag_manager_id'])
+            : '';
+        $sanitized['facebook_pixel_id'] = isset($input['facebook_pixel_id'])
+            ? sanitize_text_field($input['facebook_pixel_id'])
+            : '';
+        $sanitized['tiktok_pixel_id'] = isset($input['tiktok_pixel_id'])
+            ? sanitize_text_field($input['tiktok_pixel_id'])
+            : '';
+
+        // Scripts - Custom Scripts (allow script tags)
+        $sanitized['head_scripts_necessary'] = isset($input['head_scripts_necessary'])
+            ? $this->sanitize_script_content($input['head_scripts_necessary'])
+            : '';
+        $sanitized['head_scripts_analytics'] = isset($input['head_scripts_analytics'])
+            ? $this->sanitize_script_content($input['head_scripts_analytics'])
+            : '';
+        $sanitized['head_scripts_marketing'] = isset($input['head_scripts_marketing'])
+            ? $this->sanitize_script_content($input['head_scripts_marketing'])
+            : '';
+        $sanitized['body_scripts_necessary'] = isset($input['body_scripts_necessary'])
+            ? $this->sanitize_script_content($input['body_scripts_necessary'])
+            : '';
+        $sanitized['body_scripts_analytics'] = isset($input['body_scripts_analytics'])
+            ? $this->sanitize_script_content($input['body_scripts_analytics'])
+            : '';
+        $sanitized['body_scripts_marketing'] = isset($input['body_scripts_marketing'])
+            ? $this->sanitize_script_content($input['body_scripts_marketing'])
+            : '';
+
+        // Scripts - URL Pattern Blocking
+        $sanitized['block_patterns'] = array();
+        if (isset($input['block_patterns']) && is_array($input['block_patterns'])) {
+            foreach ($input['block_patterns'] as $item) {
+                $pattern = isset($item['pattern']) ? sanitize_text_field($item['pattern']) : '';
+                if (!empty($pattern)) {
+                    $category = isset($item['category']) && in_array($item['category'], array('analytics', 'marketing'))
+                        ? $item['category']
+                        : 'analytics';
+                    $sanitized['block_patterns'][] = array(
+                        'pattern' => $pattern,
+                        'category' => $category,
+                    );
+                }
+            }
+        }
+
+        // Auto-blocking
+        $sanitized['auto_block_known_scripts'] = isset($input['auto_block_known_scripts'])
+            ? (bool) $input['auto_block_known_scripts']
+            : false;
+
         return $sanitized;
     }
 
@@ -282,6 +358,21 @@ class WPSLT_Cookie_Admin
             return 'transparent';
         }
         return sanitize_hex_color($color);
+    }
+
+    /**
+     * Sanitize script content
+     * Allow script tags but remove potentially dangerous content
+     */
+    private function sanitize_script_content($content)
+    {
+        // Allow script tags and their content
+        // Remove any PHP tags for security
+        $content = preg_replace('/<\?php.*?\?>/is', '', $content);
+        $content = preg_replace('/<\?.*?\?>/is', '', $content);
+
+        // Trim whitespace
+        return trim($content);
     }
 
     /**
@@ -339,6 +430,9 @@ class WPSLT_Cookie_Admin
                             <button type="button" class="wpslt-tab" data-tab="categories">
                                 <?php esc_html_e('Categories', 'wp-slatan-theme'); ?>
                             </button>
+                            <button type="button" class="wpslt-tab" data-tab="scripts">
+                                <?php esc_html_e('Scripts', 'wp-slatan-theme'); ?>
+                            </button>
                         </div>
 
                         <!-- General Tab -->
@@ -359,6 +453,11 @@ class WPSLT_Cookie_Admin
                         <!-- Categories Tab -->
                         <div id="wpslt-tab-categories" class="wpslt-tab-content">
                             <?php $this->render_categories_tab(); ?>
+                        </div>
+
+                        <!-- Scripts Tab -->
+                        <div id="wpslt-tab-scripts" class="wpslt-tab-content">
+                            <?php $this->render_scripts_tab(); ?>
                         </div>
 
                         <div class="wpslt-submit-wrap">
@@ -781,6 +880,229 @@ class WPSLT_Cookie_Admin
                 <?php esc_html_e('Add Category', 'wp-slatan-theme'); ?>
             </button>
         </p>
+        <?php
+    }
+
+    /**
+     * Render Scripts tab
+     */
+    private function render_scripts_tab()
+    {
+        ?>
+        <p class="description" style="margin-bottom: 20px;">
+            <?php esc_html_e('Manage tracking scripts and control which scripts are blocked until user consent. Scripts will only load after the user accepts the corresponding cookie category.', 'wp-slatan-theme'); ?>
+        </p>
+
+        <!-- Built-in Integrations -->
+        <h3 style="margin-top: 0;">
+            <?php esc_html_e('🔌 Built-in Integrations', 'wp-slatan-theme'); ?>
+        </h3>
+        <p class="description">
+            <?php esc_html_e('Enter your tracking IDs below. These scripts will be automatically blocked until user consent (Analytics category).', 'wp-slatan-theme'); ?>
+        </p>
+        <table class="form-table">
+            <tr>
+                <th scope="row">
+                    <label for="wpslt_google_analytics_id">
+                        <?php esc_html_e('Google Analytics ID', 'wp-slatan-theme'); ?>
+                    </label>
+                </th>
+                <td>
+                    <input type="text" id="wpslt_google_analytics_id"
+                        name="<?php echo self::OPTION_NAME; ?>[google_analytics_id]"
+                        value="<?php echo esc_attr($this->settings['google_analytics_id']); ?>"
+                        class="regular-text"
+                        placeholder="G-XXXXXXXXXX">
+                    <p class="description">
+                        <?php esc_html_e('Google Analytics 4 Measurement ID (e.g., G-XXXXXXXXXX)', 'wp-slatan-theme'); ?>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="wpslt_google_tag_manager_id">
+                        <?php esc_html_e('Google Tag Manager ID', 'wp-slatan-theme'); ?>
+                    </label>
+                </th>
+                <td>
+                    <input type="text" id="wpslt_google_tag_manager_id"
+                        name="<?php echo self::OPTION_NAME; ?>[google_tag_manager_id]"
+                        value="<?php echo esc_attr($this->settings['google_tag_manager_id']); ?>"
+                        class="regular-text"
+                        placeholder="GTM-XXXXXXX">
+                    <p class="description">
+                        <?php esc_html_e('Google Tag Manager Container ID (e.g., GTM-XXXXXXX)', 'wp-slatan-theme'); ?>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="wpslt_facebook_pixel_id">
+                        <?php esc_html_e('Facebook Pixel ID', 'wp-slatan-theme'); ?>
+                    </label>
+                </th>
+                <td>
+                    <input type="text" id="wpslt_facebook_pixel_id"
+                        name="<?php echo self::OPTION_NAME; ?>[facebook_pixel_id]"
+                        value="<?php echo esc_attr($this->settings['facebook_pixel_id']); ?>"
+                        class="regular-text"
+                        placeholder="123456789012345">
+                    <p class="description">
+                        <?php esc_html_e('Meta (Facebook) Pixel ID - Marketing category', 'wp-slatan-theme'); ?>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="wpslt_tiktok_pixel_id">
+                        <?php esc_html_e('TikTok Pixel ID', 'wp-slatan-theme'); ?>
+                    </label>
+                </th>
+                <td>
+                    <input type="text" id="wpslt_tiktok_pixel_id"
+                        name="<?php echo self::OPTION_NAME; ?>[tiktok_pixel_id]"
+                        value="<?php echo esc_attr($this->settings['tiktok_pixel_id']); ?>"
+                        class="regular-text"
+                        placeholder="XXXXXXXXXXXXXXXXXX">
+                    <p class="description">
+                        <?php esc_html_e('TikTok Pixel ID - Marketing category', 'wp-slatan-theme'); ?>
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Auto-blocking -->
+        <h3>
+            <?php esc_html_e('🛡️ Auto-blocking', 'wp-slatan-theme'); ?>
+        </h3>
+        <table class="form-table">
+            <tr>
+                <th scope="row">
+                    <label for="wpslt_auto_block">
+                        <?php esc_html_e('Auto-block Known Scripts', 'wp-slatan-theme'); ?>
+                    </label>
+                </th>
+                <td>
+                    <label class="wpslt-toggle">
+                        <input type="checkbox" id="wpslt_auto_block"
+                            name="<?php echo self::OPTION_NAME; ?>[auto_block_known_scripts]"
+                            value="1" <?php checked($this->settings['auto_block_known_scripts'], true); ?>>
+                        <span class="wpslt-toggle-slider"></span>
+                    </label>
+                    <p class="description">
+                        <?php esc_html_e('Automatically block known third-party scripts (Google Analytics, Facebook, etc.) until consent. This works by intercepting script loading based on URL patterns.', 'wp-slatan-theme'); ?>
+                    </p>
+                </td>
+            </tr>
+        </table>
+
+        <!-- URL Pattern Blocking -->
+        <h3>
+            <?php esc_html_e('🔗 URL Pattern Blocking', 'wp-slatan-theme'); ?>
+        </h3>
+        <p class="description">
+            <?php esc_html_e('Add URL patterns to block third-party scripts until consent. Enter partial URLs to match (e.g., "google-analytics.com" will block any script containing that URL).', 'wp-slatan-theme'); ?>
+        </p>
+        <div id="wpslt-block-patterns">
+            <?php
+            $patterns = $this->settings['block_patterns'];
+            if (empty($patterns)) {
+                $patterns = array(array('pattern' => '', 'category' => 'analytics'));
+            }
+            foreach ($patterns as $index => $item):
+            ?>
+                <div class="wpslt-pattern-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                    <input type="text"
+                        name="<?php echo self::OPTION_NAME; ?>[block_patterns][<?php echo $index; ?>][pattern]"
+                        value="<?php echo esc_attr($item['pattern']); ?>"
+                        class="regular-text"
+                        placeholder="e.g., hotjar.com">
+                    <select name="<?php echo self::OPTION_NAME; ?>[block_patterns][<?php echo $index; ?>][category]">
+                        <option value="analytics" <?php selected($item['category'], 'analytics'); ?>>
+                            <?php esc_html_e('Analytics', 'wp-slatan-theme'); ?>
+                        </option>
+                        <option value="marketing" <?php selected($item['category'], 'marketing'); ?>>
+                            <?php esc_html_e('Marketing', 'wp-slatan-theme'); ?>
+                        </option>
+                    </select>
+                    <button type="button" class="button wpslt-remove-pattern">
+                        <span class="dashicons dashicons-no-alt" style="vertical-align: middle;"></span>
+                    </button>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <p>
+            <button type="button" id="wpslt-add-pattern" class="button">
+                <span class="dashicons dashicons-plus-alt2" style="vertical-align: middle;"></span>
+                <?php esc_html_e('Add Pattern', 'wp-slatan-theme'); ?>
+            </button>
+        </p>
+
+        <!-- Custom Scripts -->
+        <h3>
+            <?php esc_html_e('📝 Custom Scripts', 'wp-slatan-theme'); ?>
+        </h3>
+        <p class="description">
+            <?php esc_html_e('Add custom scripts that will be loaded based on user consent. Scripts in Necessary will load immediately. Analytics and Marketing scripts will only load after consent.', 'wp-slatan-theme'); ?>
+        </p>
+
+        <div class="wpslt-scripts-accordion">
+            <!-- Head Scripts - Analytics -->
+            <div class="wpslt-accordion-item" style="margin-bottom: 15px;">
+                <h4 style="margin: 0 0 8px;">
+                    <?php esc_html_e('Head Scripts - Analytics', 'wp-slatan-theme'); ?>
+                </h4>
+                <textarea id="wpslt_head_scripts_analytics"
+                    name="<?php echo self::OPTION_NAME; ?>[head_scripts_analytics]"
+                    rows="5" class="large-text code"
+                    placeholder="<!-- Your analytics scripts here -->"><?php echo esc_textarea($this->settings['head_scripts_analytics']); ?></textarea>
+                <p class="description">
+                    <?php esc_html_e('Scripts loaded in <head> after Analytics consent.', 'wp-slatan-theme'); ?>
+                </p>
+            </div>
+
+            <!-- Head Scripts - Marketing -->
+            <div class="wpslt-accordion-item" style="margin-bottom: 15px;">
+                <h4 style="margin: 0 0 8px;">
+                    <?php esc_html_e('Head Scripts - Marketing', 'wp-slatan-theme'); ?>
+                </h4>
+                <textarea id="wpslt_head_scripts_marketing"
+                    name="<?php echo self::OPTION_NAME; ?>[head_scripts_marketing]"
+                    rows="5" class="large-text code"
+                    placeholder="<!-- Your marketing scripts here -->"><?php echo esc_textarea($this->settings['head_scripts_marketing']); ?></textarea>
+                <p class="description">
+                    <?php esc_html_e('Scripts loaded in <head> after Marketing consent.', 'wp-slatan-theme'); ?>
+                </p>
+            </div>
+
+            <!-- Body Scripts - Analytics -->
+            <div class="wpslt-accordion-item" style="margin-bottom: 15px;">
+                <h4 style="margin: 0 0 8px;">
+                    <?php esc_html_e('Body Scripts - Analytics', 'wp-slatan-theme'); ?>
+                </h4>
+                <textarea id="wpslt_body_scripts_analytics"
+                    name="<?php echo self::OPTION_NAME; ?>[body_scripts_analytics]"
+                    rows="5" class="large-text code"
+                    placeholder="<!-- Your analytics scripts here -->"><?php echo esc_textarea($this->settings['body_scripts_analytics']); ?></textarea>
+                <p class="description">
+                    <?php esc_html_e('Scripts loaded before </body> after Analytics consent.', 'wp-slatan-theme'); ?>
+                </p>
+            </div>
+
+            <!-- Body Scripts - Marketing -->
+            <div class="wpslt-accordion-item" style="margin-bottom: 15px;">
+                <h4 style="margin: 0 0 8px;">
+                    <?php esc_html_e('Body Scripts - Marketing', 'wp-slatan-theme'); ?>
+                </h4>
+                <textarea id="wpslt_body_scripts_marketing"
+                    name="<?php echo self::OPTION_NAME; ?>[body_scripts_marketing]"
+                    rows="5" class="large-text code"
+                    placeholder="<!-- Your marketing scripts here -->"><?php echo esc_textarea($this->settings['body_scripts_marketing']); ?></textarea>
+                <p class="description">
+                    <?php esc_html_e('Scripts loaded before </body> after Marketing consent.', 'wp-slatan-theme'); ?>
+                </p>
+            </div>
+        </div>
         <?php
     }
 

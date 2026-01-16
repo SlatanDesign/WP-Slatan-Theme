@@ -18,7 +18,9 @@
         bannerType: 'bar-bottom',
         animation: 'slide',
         showRevisit: true,
-        categories: []
+        categories: [],
+        blockPatterns: [],
+        autoBlock: true
     };
 
     // Merge config with defaults
@@ -443,10 +445,23 @@
         blockedScripts: [],
 
         /**
+         * Store blocked script URLs (for URL pattern blocking)
+         */
+        blockedUrls: new Map(),
+
+        /**
+         * Observer for new scripts
+         */
+        observer: null,
+
+        /**
          * Initialize script blocking
          * Find all scripts with data-wpslt-category and block them
          */
         init: function () {
+            // Initialize URL pattern blocking FIRST (before any scripts load)
+            this.initUrlPatternBlocking();
+
             // Find all scripts with data-wpslt-category attribute
             const scripts = document.querySelectorAll('script[data-wpslt-category]');
 
@@ -464,6 +479,127 @@
                     executed: false
                 });
             });
+        },
+
+        /**
+         * Initialize URL Pattern Blocking
+         * Uses MutationObserver to intercept scripts before they load
+         */
+        initUrlPatternBlocking: function () {
+            const patterns = settings.blockPatterns || [];
+            if (patterns.length === 0) return;
+
+            // Create a MutationObserver to watch for new script elements
+            this.observer = new MutationObserver((mutations) => {
+                mutations.forEach(mutation => {
+                    mutation.addedNodes.forEach(node => {
+                        if (node.nodeName === 'SCRIPT') {
+                            this.handleNewScript(node);
+                        }
+                    });
+                });
+            });
+
+            // Start observing
+            this.observer.observe(document.documentElement, {
+                childList: true,
+                subtree: true
+            });
+
+            // Also check existing scripts
+            document.querySelectorAll('script[src]').forEach(script => {
+                this.handleExistingScript(script);
+            });
+        },
+
+        /**
+         * Handle newly added script
+         */
+        handleNewScript: function (script) {
+            const src = script.src || script.getAttribute('src');
+            if (!src) return;
+
+            // Skip if already processed
+            if (script.hasAttribute('data-wpslt-processed')) return;
+            script.setAttribute('data-wpslt-processed', 'true');
+
+            // Check if script matches any block pattern
+            const matchedPattern = this.matchesBlockPattern(src);
+            if (matchedPattern) {
+                // Check if we have consent for this category
+                const hasConsent = store.consent &&
+                    store.consent.categories &&
+                    store.consent.categories[matchedPattern.category] === true;
+
+                if (!hasConsent) {
+                    // Block the script
+                    this.blockScript(script, matchedPattern.category, src);
+                }
+            }
+        },
+
+        /**
+         * Handle existing script (check and potentially block on next load)
+         */
+        handleExistingScript: function (script) {
+            const src = script.src || script.getAttribute('src');
+            if (!src) return;
+
+            // Skip if already processed
+            if (script.hasAttribute('data-wpslt-processed')) return;
+            script.setAttribute('data-wpslt-processed', 'true');
+
+            // Check if script matches any block pattern
+            const matchedPattern = this.matchesBlockPattern(src);
+            if (matchedPattern) {
+                // Store for reference (can't block already loaded scripts)
+                this.blockedUrls.set(src, {
+                    category: matchedPattern.category,
+                    loaded: true
+                });
+            }
+        },
+
+        /**
+         * Block a script from loading
+         */
+        blockScript: function (script, category, src) {
+            // Remove the script element before it loads
+            if (script.parentNode) {
+                script.parentNode.removeChild(script);
+            }
+
+            // Store the blocked script info for later execution
+            this.blockedScripts.push({
+                category: category,
+                src: src,
+                inline: null,
+                attributes: this.getScriptAttributes(script),
+                executed: false,
+                blockedByPattern: true
+            });
+
+            this.blockedUrls.set(src, {
+                category: category,
+                loaded: false
+            });
+
+            console.log('[Cookie Consent] Blocked script:', src, '(Category:', category + ')');
+        },
+
+        /**
+         * Check if URL matches any block pattern
+         */
+        matchesBlockPattern: function (url) {
+            const patterns = settings.blockPatterns || [];
+
+            for (const item of patterns) {
+                if (url.includes(item.pattern)) {
+                    return item;
+                }
+            }
+
+            return null;
         },
 
         /**
@@ -503,6 +639,9 @@
                 newScript.setAttribute(key, scriptInfo.attributes[key]);
             });
 
+            // Mark as processed so observer doesn't block it again
+            newScript.setAttribute('data-wpslt-processed', 'true');
+
             if (scriptInfo.src) {
                 // External script
                 newScript.src = scriptInfo.src;
@@ -514,6 +653,14 @@
 
             // Append to document
             document.head.appendChild(newScript);
+
+            // Update blockedUrls map
+            if (scriptInfo.src) {
+                this.blockedUrls.set(scriptInfo.src, {
+                    category: scriptInfo.category,
+                    loaded: true
+                });
+            }
         },
 
         /**
@@ -536,6 +683,18 @@
             if (store.consent && store.consent.categories) {
                 this.executeBasedOnConsent(store.consent.categories);
             }
+        },
+
+        /**
+         * Get blocked scripts info (for debugging)
+         */
+        getBlockedScripts: function () {
+            return this.blockedScripts.map(s => ({
+                category: s.category,
+                src: s.src,
+                executed: s.executed,
+                blockedByPattern: s.blockedByPattern || false
+            }));
         }
     };
 
@@ -599,6 +758,27 @@
          */
         executeScripts: function (category) {
             ScriptBlocker.executeCategory(category);
+        },
+
+        /**
+         * Get list of blocked scripts (for debugging)
+         */
+        getBlockedScripts: function () {
+            return ScriptBlocker.getBlockedScripts();
+        },
+
+        /**
+         * Check if a specific URL pattern is blocked
+         */
+        isUrlBlocked: function (url) {
+            const pattern = ScriptBlocker.matchesBlockPattern(url);
+            if (!pattern) return false;
+
+            const hasConsent = store.consent &&
+                store.consent.categories &&
+                store.consent.categories[pattern.category] === true;
+
+            return !hasConsent;
         }
     };
 

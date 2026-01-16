@@ -19,6 +19,7 @@
         initTabs();
         initColorPickers();
         initCategories();
+        initPatterns();
         initLivePreview();
 
         // Initial preview update
@@ -186,6 +187,59 @@
         });
 
         categoryIndex = $('#wpslt-categories-list .wpslt-category-item').length;
+    }
+
+    /**
+     * Initialize URL Pattern management
+     */
+    function initPatterns() {
+        let patternIndex = $('#wpslt-block-patterns .wpslt-pattern-row').length;
+
+        // Add pattern
+        $('#wpslt-add-pattern').on('click', function () {
+            const optionName = 'wpslt_cookie_consent_settings';
+            const html = `
+                <div class="wpslt-pattern-row" style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
+                    <input type="text"
+                        name="${optionName}[block_patterns][${patternIndex}][pattern]"
+                        value=""
+                        class="regular-text"
+                        placeholder="e.g., hotjar.com">
+                    <select name="${optionName}[block_patterns][${patternIndex}][category]">
+                        <option value="analytics">Analytics</option>
+                        <option value="marketing">Marketing</option>
+                    </select>
+                    <button type="button" class="button wpslt-remove-pattern">
+                        <span class="dashicons dashicons-no-alt" style="vertical-align: middle;"></span>
+                    </button>
+                </div>
+            `;
+            $('#wpslt-block-patterns').append(html);
+            patternIndex++;
+        });
+
+        // Remove pattern
+        $(document).on('click', '.wpslt-remove-pattern', function () {
+            $(this).closest('.wpslt-pattern-row').remove();
+            reindexPatterns();
+        });
+    }
+
+    /**
+     * Reindex patterns after deletion
+     */
+    function reindexPatterns() {
+        const optionName = 'wpslt_cookie_consent_settings';
+
+        $('#wpslt-block-patterns .wpslt-pattern-row').each(function (index) {
+            $(this).find('input, select').each(function () {
+                const name = $(this).attr('name');
+                if (name) {
+                    const newName = name.replace(/\[block_patterns\]\[\d+\]/, `[block_patterns][${index}]`);
+                    $(this).attr('name', newName);
+                }
+            });
+        });
     }
 
     /**

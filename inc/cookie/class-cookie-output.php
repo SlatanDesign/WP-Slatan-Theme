@@ -48,9 +48,11 @@ class WPSLT_Cookie_Output {
         }
 
         add_action('wp_enqueue_scripts', array($this, 'enqueue_assets'));
+        add_action('wp_head', array($this, 'render_head_scripts'), 1);
         add_action('wp_footer', array($this, 'render_banner'));
         add_action('wp_footer', array($this, 'render_preferences_modal'));
         add_action('wp_footer', array($this, 'render_revisit_button'));
+        add_action('wp_footer', array($this, 'render_body_scripts'), 99);
 
         // Shortcodes
         add_shortcode('wpslt_cookie_settings', array($this, 'shortcode_settings_button'));
@@ -109,6 +111,43 @@ class WPSLT_Cookie_Output {
      * Get script configuration
      */
     private function get_script_config() {
+        // Known scripts patterns for auto-blocking
+        $known_scripts = array(
+            // Google
+            array('pattern' => 'google-analytics.com', 'category' => 'analytics'),
+            array('pattern' => 'googletagmanager.com', 'category' => 'analytics'),
+            array('pattern' => 'gtag/js', 'category' => 'analytics'),
+            // Facebook/Meta
+            array('pattern' => 'connect.facebook.net', 'category' => 'marketing'),
+            array('pattern' => 'facebook.com/tr', 'category' => 'marketing'),
+            array('pattern' => 'fbevents.js', 'category' => 'marketing'),
+            // TikTok
+            array('pattern' => 'analytics.tiktok.com', 'category' => 'marketing'),
+            array('pattern' => 'tiktok.com/i18n', 'category' => 'marketing'),
+            // Hotjar
+            array('pattern' => 'hotjar.com', 'category' => 'analytics'),
+            array('pattern' => 'static.hotjar.com', 'category' => 'analytics'),
+            // Microsoft/Bing
+            array('pattern' => 'clarity.ms', 'category' => 'analytics'),
+            array('pattern' => 'bat.bing.com', 'category' => 'marketing'),
+            // LinkedIn
+            array('pattern' => 'snap.licdn.com', 'category' => 'marketing'),
+            array('pattern' => 'linkedin.com/px', 'category' => 'marketing'),
+            // Twitter/X
+            array('pattern' => 'static.ads-twitter.com', 'category' => 'marketing'),
+            array('pattern' => 'analytics.twitter.com', 'category' => 'marketing'),
+            // Pinterest
+            array('pattern' => 'pintrk', 'category' => 'marketing'),
+            array('pattern' => 'ct.pinterest.com', 'category' => 'marketing'),
+            // Snapchat
+            array('pattern' => 'sc-static.net/scevent', 'category' => 'marketing'),
+        );
+
+        // Merge with custom patterns
+        $block_patterns = $this->settings['auto_block_known_scripts']
+            ? array_merge($known_scripts, $this->settings['block_patterns'])
+            : $this->settings['block_patterns'];
+
         return array(
             'cookieName' => 'wpslt_cookie_consent',
             'cookieExpiry' => absint($this->settings['cookie_expiry']),
@@ -123,6 +162,8 @@ class WPSLT_Cookie_Output {
                     'defaultState' => $cat['default_state'],
                 );
             }, $this->settings['categories']),
+            'blockPatterns' => $block_patterns,
+            'autoBlock' => $this->settings['auto_block_known_scripts'],
         );
     }
 
@@ -287,6 +328,142 @@ class WPSLT_Cookie_Output {
             <span class="wpslt-cookie-revisit-text"><?php echo esc_html($this->settings['settings_text']); ?></span>
         </button>
         <?php
+    }
+
+    /**
+     * Render head scripts (built-in integrations + custom head scripts)
+     */
+    public function render_head_scripts() {
+        $s = $this->settings;
+
+        // Google Analytics
+        if (!empty($s['google_analytics_id'])) {
+            $ga_id = esc_attr($s['google_analytics_id']);
+            ?>
+            <script type="text/plain" data-wpslt-category="analytics" data-wpslt-src="https://www.googletagmanager.com/gtag/js?id=<?php echo $ga_id; ?>"></script>
+            <script type="text/plain" data-wpslt-category="analytics">
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '<?php echo $ga_id; ?>');
+            </script>
+            <?php
+        }
+
+        // Google Tag Manager
+        if (!empty($s['google_tag_manager_id'])) {
+            $gtm_id = esc_attr($s['google_tag_manager_id']);
+            ?>
+            <script type="text/plain" data-wpslt-category="analytics">
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','<?php echo $gtm_id; ?>');
+            </script>
+            <?php
+        }
+
+        // Facebook Pixel
+        if (!empty($s['facebook_pixel_id'])) {
+            $fb_id = esc_attr($s['facebook_pixel_id']);
+            ?>
+            <script type="text/plain" data-wpslt-category="marketing">
+                !function(f,b,e,v,n,t,s)
+                {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+                n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+                if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+                n.queue=[];t=b.createElement(e);t.async=!0;
+                t.src=v;s=b.getElementsByTagName(e)[0];
+                s.parentNode.insertBefore(t,s)}(window, document,'script',
+                'https://connect.facebook.net/en_US/fbevents.js');
+                fbq('init', '<?php echo $fb_id; ?>');
+                fbq('track', 'PageView');
+            </script>
+            <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=<?php echo $fb_id; ?>&ev=PageView&noscript=1"/></noscript>
+            <?php
+        }
+
+        // TikTok Pixel
+        if (!empty($s['tiktok_pixel_id'])) {
+            $tt_id = esc_attr($s['tiktok_pixel_id']);
+            ?>
+            <script type="text/plain" data-wpslt-category="marketing">
+                !function (w, d, t) {
+                w.TiktokAnalyticsObject=t;var ttq=w[t]=w[t]||[];ttq.methods=["page","track","identify","instances","debug","on","off","once","ready","alias","group","enableCookie","disableCookie"],ttq.setAndDefer=function(t,e){t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}};for(var i=0;i<ttq.methods.length;i++)ttq.setAndDefer(ttq,ttq.methods[i]);ttq.instance=function(t){for(var e=ttq._i[t]||[],n=0;n<ttq.methods.length;n++)ttq.setAndDefer(e,ttq.methods[n]);return e},ttq.load=function(e,n){var i="https://analytics.tiktok.com/i18n/pixel/events.js";ttq._i=ttq._i||{},ttq._i[e]=[],ttq._i[e]._u=i,ttq._t=ttq._t||{},ttq._t[e]=+new Date,ttq._o=ttq._o||{},ttq._o[e]=n||{};var o=document.createElement("script");o.type="text/javascript",o.async=!0,o.src=i+"?sdkid="+e+"&lib="+t;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(o,a)};
+                ttq.load('<?php echo $tt_id; ?>');
+                ttq.page();
+                }(window, document, 'ttq');
+            </script>
+            <?php
+        }
+
+        // Custom Head Scripts - Analytics
+        if (!empty($s['head_scripts_analytics'])) {
+            echo $this->wrap_scripts_with_category($s['head_scripts_analytics'], 'analytics');
+        }
+
+        // Custom Head Scripts - Marketing
+        if (!empty($s['head_scripts_marketing'])) {
+            echo $this->wrap_scripts_with_category($s['head_scripts_marketing'], 'marketing');
+        }
+    }
+
+    /**
+     * Render body scripts (custom body scripts)
+     */
+    public function render_body_scripts() {
+        $s = $this->settings;
+
+        // GTM noscript (if GTM is configured)
+        if (!empty($s['google_tag_manager_id'])) {
+            $gtm_id = esc_attr($s['google_tag_manager_id']);
+            ?>
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?php echo $gtm_id; ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+            <?php
+        }
+
+        // Custom Body Scripts - Analytics
+        if (!empty($s['body_scripts_analytics'])) {
+            echo $this->wrap_scripts_with_category($s['body_scripts_analytics'], 'analytics');
+        }
+
+        // Custom Body Scripts - Marketing
+        if (!empty($s['body_scripts_marketing'])) {
+            echo $this->wrap_scripts_with_category($s['body_scripts_marketing'], 'marketing');
+        }
+    }
+
+    /**
+     * Wrap script tags with consent category
+     */
+    private function wrap_scripts_with_category($content, $category) {
+        // Find all <script> tags and modify them
+        $content = preg_replace_callback(
+            '/<script([^>]*)>(.*?)<\/script>/is',
+            function($matches) use ($category) {
+                $attrs = $matches[1];
+                $inner = $matches[2];
+
+                // Check if it already has data-wpslt-category
+                if (strpos($attrs, 'data-wpslt-category') !== false) {
+                    return $matches[0];
+                }
+
+                // Check if it has src attribute
+                if (preg_match('/\bsrc\s*=\s*["\']([^"\']+)["\']/i', $attrs, $src_match)) {
+                    // External script - change src to data-wpslt-src
+                    $new_attrs = preg_replace('/\bsrc\s*=/', 'data-wpslt-src=', $attrs);
+                    return '<script type="text/plain" data-wpslt-category="' . esc_attr($category) . '"' . $new_attrs . '>' . $inner . '</script>';
+                } else {
+                    // Inline script
+                    return '<script type="text/plain" data-wpslt-category="' . esc_attr($category) . '"' . $attrs . '>' . $inner . '</script>';
+                }
+            },
+            $content
+        );
+
+        return $content;
     }
 
     /**
